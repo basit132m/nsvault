@@ -117,42 +117,44 @@ add_filter( 'post_type_link', function ( $link, $post ) {
 
 /* ── Fix 404 in prefix-less mode ────────────────────────────
  *
- * WordPress's built-in pagename rewrite rule matches /{slug}/
- * BEFORE our bottom-priority rule, so it sets pagename=slug
- * and returns 404 when no WP page exists with that slug.
+ * WordPress resolves /{slug}/ differently depending on the
+ * active permalink structure:
  *
- * This filter intercepts the parsed request vars and, when
- * WordPress has resolved a URL to a "pagename" that doesn't
- * belong to a real page, checks whether a published `downloads`
- * post with that slug exists and reroutes the query accordingly.
- * Real WP pages (about, contact, …) are untouched.
+ *   /%postname%/          → sets $vars['name']     (post-name rule wins)
+ *   /blog/%postname%/     → sets $vars['pagename'] (pagename catch-all wins)
+ *   /%year%/%postname%/   → sets $vars['pagename']
+ *
+ * In every case WordPress resolves to a regular post or page, finds
+ * none, and returns 404. We intercept both vars and reroute to the
+ * downloads CPT when a matching published post exists.
  */
 add_filter( 'request', function ( $vars ) {
 
     // Only active in prefix-less mode
     if ( svault_dl_slug() !== '' ) return $vars;
 
-    // Only intercept when WordPress resolved the URL as a "page"
-    if ( empty( $vars['pagename'] ) ) return $vars;
-
-    $slug = $vars['pagename'];
-
-    // Ignore multi-level paths (real WP pages like /parent/child/)
-    if ( strpos( $slug, '/' ) !== false ) return $vars;
-
-    /* ── Check 1: is this the archive slug? ────────────────────
-     *
-     * If a WP page happens to share the archive slug, the pagename
-     * rule would win (same priority). We always want the archive.
+    /*
+     * Detect the slug regardless of which permalink structure is active.
+     * pagename → date/category-prefix permalink structures
+     * name     → /%postname%/ permalink structure (most common)
      */
+    $slug = '';
+
+    if ( ! empty( $vars['pagename'] ) && strpos( $vars['pagename'], '/' ) === false ) {
+        $slug = $vars['pagename'];
+    } elseif ( ! empty( $vars['name'] ) && empty( $vars['post_type'] ) && strpos( $vars['name'], '/' ) === false ) {
+        $slug = $vars['name'];
+    }
+
+    if ( $slug === '' ) return $vars;
+
+    // ── Check 1: is this the archive slug? ──────────────────────
     if ( $slug === svault_archive_slug() ) {
         return [ 'post_type' => 'downloads' ];
     }
 
-    /* ── Check 2: is this a single downloads post slug? ────────
-     *
-     * Direct DB lookup — avoids WP_Query recursion.
-     */
+    // ── Check 2: is this a published downloads post? ────────────
+    // Direct DB query — avoids WP_Query recursion
     global $wpdb;
     $post_id = $wpdb->get_var( $wpdb->prepare(
         "SELECT ID FROM {$wpdb->posts}
@@ -163,7 +165,7 @@ add_filter( 'request', function ( $vars ) {
         $slug
     ) );
 
-    if ( ! $post_id ) return $vars; // no match → leave as-is (real page or 404)
+    if ( ! $post_id ) return $vars; // no match → real page/404, leave as-is
 
     // Override: serve this downloads post
     return [
