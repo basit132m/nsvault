@@ -2,14 +2,21 @@
 /**
  * Custom Post Type: downloads
  *
- * Slugs are read from Settings → Permalinks (stored in wp_options).
+ * Single URL behaviour (controlled from Settings → إعدادات SoftVault AR):
  *
- * Single  URL : /{svault_dl_slug}/{post-slug}/
- * Archive URL : /{svault_archive_slug}/
+ *   svault_dl_slug = ''          → /photoshop/           (no prefix)
+ *   svault_dl_slug = 'download'  → /download/photoshop/
+ *   svault_dl_slug = 'برامج'     → /برامج/photoshop/
+ *
+ * Archive URL: /{svault_archive_slug}/
  */
 defined( 'ABSPATH' ) || exit;
 
+/* ── Register post type ──────────────────────────────────── */
 add_action( 'init', function () {
+
+    $dl_slug     = svault_dl_slug();
+    $has_prefix  = $dl_slug !== '';
 
     $labels = [
         'name'               => __( 'التحميلات', 'softvault-ar' ),
@@ -33,17 +40,48 @@ add_action( 'init', function () {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'show_in_rest'       => false,
-        'query_var'          => true,
+        'query_var'          => 'downloads',
         'capability_type'    => 'post',
-        'has_archive'        => svault_archive_slug(),   // ← from Permalinks settings
+        'has_archive'        => svault_archive_slug(),
         'hierarchical'       => false,
         'menu_position'      => 5,
         'menu_icon'          => 'dashicons-download',
         'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ],
-        'rewrite'            => [
-            'slug'       => svault_dl_slug(),            // ← from Permalinks settings
-            'with_front' => false,
-        ],
+
+        // When prefix is set  → /prefix/slug/
+        // When prefix is empty → rewrite=false, we add our own rule below
+        'rewrite' => $has_prefix
+            ? [ 'slug' => $dl_slug, 'with_front' => false ]
+            : false,
     ] );
 
-}, 11 ); // priority 11 — after permalink-settings.php registers the helpers
+    /* ── Prefix-less single URL: /post-name/ ───────────────
+     *
+     * When svault_dl_slug is empty we:
+     *  1. Add a rewrite rule at 'bottom' priority so WordPress
+     *     pages, posts and categories still take precedence.
+     *  2. Filter post_type_link so get_permalink() returns
+     *     the correct /slug/ URL instead of /?downloads=slug.
+     */
+    if ( ! $has_prefix ) {
+
+        // Rule: match /{anything}/ → query downloads post by name
+        // 'bottom' = lowest priority, so WP pages/posts/terms win conflicts
+        add_rewrite_rule(
+            '^([^/]+)/?$',
+            'index.php?post_type=downloads&name=$matches[1]',
+            'bottom'
+        );
+    }
+
+}, 11 ); // priority 11 ensures permalink-settings.php helpers are defined first
+
+
+/* ── Filter permalink for prefix-less mode ──────────────── */
+add_filter( 'post_type_link', function ( $link, $post ) {
+    if ( $post->post_type !== 'downloads' ) return $link;
+    if ( svault_dl_slug() !== '' ) return $link;  // prefix mode — keep default
+
+    // Prefix-less: return /{post-slug}/
+    return trailingslashit( home_url( '/' . $post->post_name ) );
+}, 10, 2 );
