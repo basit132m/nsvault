@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'add_meta_boxes', function () {
     add_meta_box(
         'rom_details',
-        __( '🎮 ROM Details', 'nsvault' ),
+        __( 'ROM Details', 'nsvault' ),
         'nsvault_render_rom_details_metabox',
         'roms',
         'normal',
@@ -15,7 +15,7 @@ add_action( 'add_meta_boxes', function () {
     );
     add_meta_box(
         'rom_downloads',
-        __( '⬇️ Download Links', 'nsvault' ),
+        __( 'Download Links', 'nsvault' ),
         'nsvault_render_rom_downloads_metabox',
         'roms',
         'normal',
@@ -23,7 +23,7 @@ add_action( 'add_meta_boxes', function () {
     );
     add_meta_box(
         'rom_screenshots',
-        __( '🖼️ Screenshots', 'nsvault' ),
+        __( 'Screenshots', 'nsvault' ),
         'nsvault_render_rom_screenshots_metabox',
         'roms',
         'normal',

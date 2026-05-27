@@ -16,7 +16,7 @@ if (is_wp_error($cats))   $cats   = [];
     <?php if ($thumb) : ?>
         <img class="new-item-thumb" src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy">
     <?php else : ?>
-        <div class="new-item-thumb-placeholder">📦</div>
+        <div class="new-item-thumb-placeholder"><i class="fa-solid fa-box-open"></i></div>
     <?php endif; ?>
     <div class="new-item-body">
         <div class="new-item-tags">
@@ -28,7 +28,7 @@ if (is_wp_error($cats))   $cats   = [];
             <span class="new-item-date"><?php echo esc_html($date); ?></span>
             <?php if ($size) : ?>
                 <span class="new-item-size">
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <i class="fa-solid fa-download fa-xs"></i>
                     <?php echo esc_html($size); ?>
                 </span>
             <?php endif; ?>

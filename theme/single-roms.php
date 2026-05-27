@@ -52,7 +52,7 @@ $sidebar_popular = nsvault_get_popular_by_genre( $genre_id, 6, $pid );
                         <?php if ( $cover ) : ?>
                             <img class="game-cover-img" src="<?php echo esc_url($cover); ?>" alt="<?php echo esc_attr($title); ?>">
                         <?php else : ?>
-                            <div class="game-cover-placeholder">🎮</div>
+                            <div class="game-cover-placeholder"><i class="fa-solid fa-gamepad"></i></div>
                         <?php endif; ?>
                     </div>
 
@@ -139,12 +139,13 @@ $sidebar_popular = nsvault_get_popular_by_genre( $genre_id, 6, $pid );
                 <div class="game-download-wrap">
                     <?php if ( $dl1_url ) : ?>
                         <a href="<?php echo esc_url($dl1_url); ?>" class="btn-download btn-download-primary" rel="nofollow" target="_blank">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            <i class="fa-solid fa-download"></i>
                             <?php echo esc_html($dl1_label); ?>
                         </a>
                     <?php endif; ?>
                     <?php if ( $dl2_url ) : ?>
                         <a href="<?php echo esc_url($dl2_url); ?>" class="btn-download btn-download-outline" rel="nofollow" target="_blank">
+                            <i class="fa-solid fa-link"></i>
                             <?php echo esc_html($dl2_label); ?>
                         </a>
                     <?php endif; ?>
@@ -180,11 +181,11 @@ $sidebar_popular = nsvault_get_popular_by_genre( $genre_id, 6, $pid );
         <!-- Problem Report Bar -->
         <div class="problem-report-bar">
             <span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <i class="fa-solid fa-circle-info" style="margin-right:4px"></i>
                 <?php esc_html_e( 'Problems with download or installation?', 'nsvault' ); ?>
             </span>
             <a href="<?php echo esc_url( home_url('/contact/') ); ?>" class="btn-report">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <i class="fa-solid fa-flag"></i>
                 <?php esc_html_e( 'Report', 'nsvault' ); ?>
             </a>
         </div>
@@ -202,7 +203,7 @@ $sidebar_popular = nsvault_get_popular_by_genre( $genre_id, 6, $pid );
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <?php echo esc_html($q); ?>
-                        <span class="faq-icon">+</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
                     </button>
                     <div class="faq-answer">
                         <p><?php echo esc_html($a); ?></p>
@@ -290,7 +291,7 @@ $roms_archive = get_post_type_archive_link( 'roms' );
                         <?php if ( $sp_thumb ) : ?>
                             <img src="<?php echo esc_url($sp_thumb); ?>" alt="<?php echo esc_attr(get_the_title($sp->ID)); ?>" loading="lazy">
                         <?php else : ?>
-                            <div style="width:36px;height:48px;background:var(--surface-3);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0">🎮</div>
+                            <div style="width:36px;height:48px;background:var(--surface-3);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0;font-size:1.1rem"><i class="fa-solid fa-gamepad"></i></div>
                         <?php endif; ?>
                         <div class="sidebar-game-info">
                             <div class="sidebar-game-title"><?php echo esc_html( get_the_title($sp->ID) ); ?></div>

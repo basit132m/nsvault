@@ -18,7 +18,7 @@ if (is_wp_error($badges)) $badges = [];
         <?php if ($thumb) : ?>
             <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy">
         <?php else : ?>
-            <div class="no-img">📦</div>
+            <div class="no-img"><i class="fa-solid fa-box-open"></i></div>
         <?php endif; ?>
         <?php if ($badges) : ?>
             <div class="game-card-badges">
@@ -33,16 +33,16 @@ if (is_wp_error($badges)) $badges = [];
         <?php endif; ?>
         <div class="game-card-stats">
             <span class="game-card-stat">
-                <svg viewBox="0 0 24 24" fill="#ffd600" width="10" height="10"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <i class="fa-solid fa-star" style="color:#ffd600;font-size:0.7rem"></i>
                 <?php echo $rating ? esc_html(number_format($rating,1)) : '—'; ?>
             </span>
             <span class="game-card-stat">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <i class="fa-solid fa-eye" style="font-size:0.7rem"></i>
                 <?php echo esc_html(svault_views($views)); ?>
             </span>
             <?php if ($size) : ?>
                 <span class="game-card-size">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <i class="fa-solid fa-download" style="font-size:0.65rem"></i>
                     <?php echo esc_html($size); ?>
                 </span>
             <?php endif; ?>

@@ -11,10 +11,18 @@ add_action( 'wp_enqueue_scripts', function () {
         null
     );
 
+    // Font Awesome 6.5
+    wp_enqueue_style(
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
+        [],
+        '6.5.2'
+    );
+
     wp_enqueue_style(
         'svault-style',
         get_stylesheet_uri(),
-        [ 'svault-fonts' ],
+        [ 'svault-fonts', 'font-awesome' ],
         SVAULT_VERSION
     );
 

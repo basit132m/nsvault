@@ -33,7 +33,9 @@ if ( empty( $posts ) ) return;
         </div>
 
         <div class="carousel-wrap">
-            <button class="carousel-btn prev" data-target="<?php echo esc_attr($id); ?>" aria-label="Previous">‹</button>
+            <button class="carousel-btn prev" data-target="<?php echo esc_attr($id); ?>" aria-label="Previous">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
 
             <div class="carousel-track" id="<?php echo esc_attr($id); ?>">
                 <?php foreach ( $posts as $cp ) :
@@ -46,14 +48,14 @@ if ( empty( $posts ) ) return;
                         <?php if ( $thumb ) : ?>
                             <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr( get_the_title($cp->ID) ); ?>" loading="lazy">
                         <?php else : ?>
-                            <div class="no-img">🎮</div>
+                            <div class="no-img"><i class="fa-solid fa-gamepad"></i></div>
                         <?php endif; ?>
                         <span class="switch-badge">NSW</span>
                         <div class="carousel-card-info">
                             <div class="carousel-card-title"><?php echo esc_html( get_the_title($cp->ID) ); ?></div>
                             <?php if ( $size ) : ?>
                                 <div class="carousel-card-size">
-                                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    <i class="fa-solid fa-download fa-xs"></i>
                                     <?php echo esc_html( $size ); ?>
                                 </div>
                             <?php endif; ?>
@@ -62,7 +64,9 @@ if ( empty( $posts ) ) return;
                 <?php endforeach; ?>
             </div>
 
-            <button class="carousel-btn next" data-target="<?php echo esc_attr($id); ?>" aria-label="Next">›</button>
+            <button class="carousel-btn next" data-target="<?php echo esc_attr($id); ?>" aria-label="Next">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
         </div>
     </div>
 </section>

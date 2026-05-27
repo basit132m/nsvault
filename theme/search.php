@@ -33,18 +33,11 @@ $to     = min( $paged * $per, $total );
         <div class="listing-controls">
             <a href="<?php echo esc_url( add_query_arg( 'view', 'grid' ) ); ?>"
                class="view-toggle-btn <?php echo $view !== 'list' ? 'active' : ''; ?>" aria-label="Grid view">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-                </svg>
+                <i class="fa-solid fa-grip"></i>
             </a>
             <a href="<?php echo esc_url( add_query_arg( 'view', 'list' ) ); ?>"
                class="view-toggle-btn <?php echo $view === 'list' ? 'active' : ''; ?>" aria-label="List view">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
-                    <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
-                    <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
+                <i class="fa-solid fa-list"></i>
             </a>
         </div>
     </div>

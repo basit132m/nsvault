@@ -5,9 +5,9 @@
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'add_meta_boxes', function () {
-    add_meta_box( 'sv_details',     '📦 تفاصيل البرنامج / اللعبة', 'svault_render_details_box',    'downloads', 'normal', 'high' );
-    add_meta_box( 'sv_downloads',   '⬇️ روابط التحميل',             'svault_render_downloads_box',  'downloads', 'normal', 'high' );
-    add_meta_box( 'sv_screenshots', '🖼️ لقطات الشاشة',              'svault_render_screenshots_box','downloads', 'normal', 'default' );
+    add_meta_box( 'sv_details',     'تفاصيل البرنامج / اللعبة', 'svault_render_details_box',    'downloads', 'normal', 'high' );
+    add_meta_box( 'sv_downloads',   'روابط التحميل',             'svault_render_downloads_box',  'downloads', 'normal', 'high' );
+    add_meta_box( 'sv_screenshots', 'لقطات الشاشة',              'svault_render_screenshots_box','downloads', 'normal', 'default' );
 } );
 
 /* ── Details ────────────────────────────────────────────── */

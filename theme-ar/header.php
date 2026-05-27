@@ -34,18 +34,12 @@
 
         <!-- بحث -->
         <button class="header-search-toggle" id="search-toggle" aria-label="بحث">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
+            <i class="fa-solid fa-magnifying-glass"></i>
         </button>
 
         <!-- زر الهاتف -->
         <button class="mobile-toggle" id="mobile-toggle" aria-label="القائمة">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
+            <i class="fa-solid fa-bars"></i>
         </button>
 
     </div>
@@ -74,7 +68,7 @@ function svault_default_nav() {
     $free    = get_term_by('slug','free','badge');
     $free_url = $free ? get_term_link($free) : home_url('/');
     echo '<ul id="primary-menu">';
-    echo '<li><a href="' . esc_url($archive) . '">⬇️ كل التحميلات</a></li>';
-    echo '<li><a href="' . esc_url($free_url) . '">🆓 البرامج المجانية</a></li>';
+    echo '<li><a href="' . esc_url($archive) . '"><i class="fa-solid fa-download"></i> كل التحميلات</a></li>';
+    echo '<li><a href="' . esc_url($free_url) . '"><i class="fa-solid fa-gift"></i> البرامج المجانية</a></li>';
     echo '</ul>';
 }

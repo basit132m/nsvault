@@ -39,7 +39,7 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
                         <?php if ($cover) : ?>
                             <img class="game-cover-img" src="<?php echo esc_url($cover); ?>" alt="<?php the_title_attribute(); ?>">
                         <?php else : ?>
-                            <div class="game-cover-placeholder">📦</div>
+                            <div class="game-cover-placeholder"><i class="fa-solid fa-box-open"></i></div>
                         <?php endif; ?>
                     </div>
 
@@ -115,12 +115,13 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
                 <div class="game-download-wrap">
                     <?php if ($dl1) : ?>
                         <a href="<?php echo esc_url($dl1); ?>" class="btn-download btn-download-primary" rel="nofollow" target="_blank">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            <i class="fa-solid fa-download"></i>
                             <?php echo esc_html($lb1); ?>
                         </a>
                     <?php endif; ?>
                     <?php if ($dl2) : ?>
                         <a href="<?php echo esc_url($dl2); ?>" class="btn-download btn-download-outline" rel="nofollow" target="_blank">
+                            <i class="fa-solid fa-link"></i>
                             <?php echo esc_html($lb2); ?>
                         </a>
                     <?php endif; ?>
@@ -153,8 +154,14 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
 
         <!-- الإبلاغ -->
         <div class="problem-report-bar">
-            <span>هل لديك مشكلة في التحميل أو التثبيت؟</span>
-            <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="btn-report">الإبلاغ عن مشكلة</a>
+            <span>
+                <i class="fa-solid fa-circle-info" style="margin-left:4px"></i>
+                هل لديك مشكلة في التحميل أو التثبيت؟
+            </span>
+            <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="btn-report">
+                <i class="fa-solid fa-flag"></i>
+                الإبلاغ عن مشكلة
+            </a>
         </div>
 
         <!-- الأسئلة الشائعة -->
@@ -170,7 +177,7 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
                 <div class="faq-item">
                     <button class="faq-question" type="button">
                         <?php echo esc_html($q); ?>
-                        <span class="faq-icon">+</span>
+                        <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
                     </button>
                     <div class="faq-answer"><p><?php echo esc_html($a); ?></p></div>
                 </div>
@@ -246,7 +253,7 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
                         <?php if ($sp_thumb) : ?>
                             <img src="<?php echo esc_url($sp_thumb); ?>" alt="<?php echo esc_attr(get_the_title($sp->ID)); ?>" loading="lazy">
                         <?php else : ?>
-                            <div style="width:36px;height:48px;background:var(--surface-3);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0">📦</div>
+                            <div style="width:36px;height:48px;background:var(--surface-3);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);flex-shrink:0;font-size:1.1rem"><i class="fa-solid fa-box-open"></i></div>
                         <?php endif; ?>
                         <div class="sidebar-game-info">
                             <div class="sidebar-game-title"><?php echo esc_html(get_the_title($sp->ID)); ?></div>

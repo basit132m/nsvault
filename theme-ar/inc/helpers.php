@@ -50,9 +50,9 @@ function svault_stars( $rating ) {
     $empty  = 5 - ceil($rating);
     $half   = ($rating - $full) >= 0.5 ? 1 : 0;
     $html   = '<span class="stars">';
-    for ($i=0;$i<$full; $i++) $html .= '<span class="star">★</span>';
-    if ($half)                  $html .= '<span class="star">½</span>';
-    for ($i=0;$i<$empty;$i++) $html .= '<span class="star empty">★</span>';
+    for ($i=0;$i<$full; $i++) $html .= '<i class="fa-solid fa-star star"></i>';
+    if ($half)                  $html .= '<i class="fa-solid fa-star-half-stroke star"></i>';
+    for ($i=0;$i<$empty;$i++) $html .= '<i class="fa-regular fa-star star empty"></i>';
     return $html . '</span>';
 }
 

@@ -1516,3 +1516,50 @@ button { cursor: pointer; }
 .wp-caption { max-width: 96%; padding: 5px 3px 10px; }
 .wp-caption .wp-caption-text { font-size: 0.8rem; color: var(--text-muted); text-align: center; }
 .screen-reader-text { clip: rect(1px,1px,1px,1px); height: 1px; overflow: hidden; position: absolute !important; width: 1px; }
+
+/* ============================================================
+   FONT AWESOME 6 — HELPERS
+============================================================ */
+
+/* Carousel chevron sizing */
+.carousel-btn i { font-size: 0.85rem; pointer-events: none; }
+
+/* View toggle icon sizing */
+.view-toggle-btn i { font-size: 0.8rem; pointer-events: none; }
+
+/* Header search & mobile toggle sizing */
+.header-search-toggle i,
+.mobile-toggle i { font-size: 1rem; }
+
+/* Footer social icon */
+.footer-social a i { font-size: 1.1rem; }
+
+/* Game card stats icons — aligned with text */
+.game-card-stat i,
+.game-card-size i,
+.game-card-list-meta i,
+.game-card-list-size i { vertical-align: middle; }
+
+/* FAQ open icon: rotate + to × */
+.faq-item.open .faq-icon i { display: none; }
+.faq-icon { position: relative; }
+.faq-item.open .faq-icon::after {
+  content: '\f068'; /* fa-minus */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+/* No-image placeholders */
+.no-img i,
+.game-cover-placeholder i,
+.new-rom-thumb-placeholder i,
+.new-item-thumb-placeholder i { pointer-events: none; }
+
+/* Problem report bar icons */
+.problem-report-bar i { vertical-align: middle; }
+.btn-report i { vertical-align: middle; }
+
+/* Download button icons */
+.btn-download i { vertical-align: middle; margin-right: 6px; }

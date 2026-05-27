@@ -22,7 +22,7 @@ if ( is_wp_error( $badges ) ) $badges = [];
     <?php if ( $thumb ) : ?>
         <img class="game-card-list-thumb" src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy">
     <?php else : ?>
-        <div class="game-card-list-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--surface-3);color:var(--text-dim)">🎮</div>
+        <div class="game-card-list-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--surface-3);color:var(--text-dim);font-size:1.4rem"><i class="fa-solid fa-gamepad"></i></div>
     <?php endif; ?>
 
     <div class="game-card-list-info">
@@ -35,15 +35,21 @@ if ( is_wp_error( $badges ) ) $badges = [];
                 <span><?php echo esc_html( $dev_name ); ?></span>
             <?php endif; ?>
             <span>
-                ★ <?php echo $rating ? esc_html( number_format($rating,1) ) : '—'; ?>
+                <i class="fa-solid fa-star" style="color:#ffd600;font-size:0.7rem"></i>
+                <?php echo $rating ? esc_html( number_format($rating,1) ) : '—'; ?>
             </span>
-            <span>👁 <?php echo esc_html( nsvault_format_views($views) ); ?></span>
+            <span>
+                <i class="fa-solid fa-eye" style="font-size:0.7rem"></i>
+                <?php echo esc_html( nsvault_format_views($views) ); ?>
+            </span>
         </div>
     </div>
 
     <div class="game-card-list-right">
         <?php if ( $size ) : ?>
-            <div class="game-card-list-size">↓ <?php echo esc_html( $size ); ?></div>
+            <div class="game-card-list-size">
+                <i class="fa-solid fa-download fa-xs"></i> <?php echo esc_html( $size ); ?>
+            </div>
         <?php endif; ?>
         <div class="game-card-list-date"><?php echo esc_html( $date ); ?></div>
     </div>
