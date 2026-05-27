@@ -195,8 +195,9 @@ function svault_popular_by_cat( $cat_id = null, $limit = 6, $exclude = null ) {
     $args = [
         'post_type'      => 'downloads',
         'posts_per_page' => $limit,
-        'orderby'        => 'meta_value_num',
-        'meta_key'       => '_sv_views',
+        // Don't require _sv_views meta to exist — fall back to date so
+        // new posts without any recorded views still appear in sidebar
+        'orderby'        => 'date',
         'order'          => 'DESC',
         'post_status'    => 'publish',
     ];

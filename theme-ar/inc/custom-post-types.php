@@ -133,6 +133,17 @@ add_filter( 'request', function ( $vars ) {
     // Only active in prefix-less mode
     if ( svault_dl_slug() !== '' ) return $vars;
 
+    // Two-segment taxonomy paths like /genre/term/ that the pagename catch-all intercepts
+    if ( ! empty( $vars['pagename'] ) && substr_count( $vars['pagename'], '/' ) === 1 ) {
+        [ $base, $term ] = explode( '/', $vars['pagename'], 2 );
+        if ( $term !== '' ) {
+            if ( $base === svault_cat_slug() )   return [ 'software_cat' => $term ];
+            if ( $base === svault_badge_slug() ) return [ 'badge'        => $term ];
+            if ( $base === 'platform' )          return [ 'sw_platform'  => $term ];
+            if ( $base === 'developer' )         return [ 'sw_developer' => $term ];
+        }
+    }
+
     /*
      * Detect the slug regardless of which permalink structure is active.
      * pagename → date/category-prefix permalink structures

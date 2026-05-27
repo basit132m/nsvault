@@ -15,3 +15,4 @@ require_once SVAULT_DIR . '/inc/custom-post-types.php';
 require_once SVAULT_DIR . '/inc/taxonomies.php';
 require_once SVAULT_DIR . '/inc/meta-boxes.php';
 require_once SVAULT_DIR . '/inc/helpers.php';
+require_once SVAULT_DIR . '/inc/download-go.php';

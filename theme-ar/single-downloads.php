@@ -113,16 +113,10 @@ $sidebar  = svault_popular_by_cat($cat_id, 6, $pid);
 
                 <!-- أزرار التحميل -->
                 <div class="game-download-wrap">
-                    <?php if ($dl1) : ?>
-                        <a href="<?php echo esc_url($dl1); ?>" class="btn-download btn-download-primary" rel="nofollow" target="_blank">
+                    <?php if ($dl1 || $dl2) : ?>
+                        <a href="<?php echo esc_url( home_url( '/go/' . get_post_field( 'post_name', $pid ) . '/' ) ); ?>" class="btn-download btn-download-primary">
                             <i class="fa-solid fa-download"></i>
-                            <?php echo esc_html($lb1); ?>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($dl2) : ?>
-                        <a href="<?php echo esc_url($dl2); ?>" class="btn-download btn-download-outline" rel="nofollow" target="_blank">
-                            <i class="fa-solid fa-link"></i>
-                            <?php echo esc_html($lb2); ?>
+                            تحميل البرنامج
                         </a>
                     <?php endif; ?>
                 </div>
