@@ -434,7 +434,7 @@ function svault_badge_slug()   { return get_option( 'svault_badge_slug',   'badg
  * Settings → Permalinks → Save Changes.
  */
 add_action( 'after_switch_theme', function () {
-    // Register CPT & taxonomies first so their rules are available
-    do_action( 'init' );
+    // WordPress already ran init before this hook fires,
+    // so CPT + taxonomies are registered. Just flush.
     flush_rewrite_rules();
 } );
