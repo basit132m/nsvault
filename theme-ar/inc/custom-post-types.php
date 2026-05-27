@@ -65,8 +65,9 @@ add_action( 'init', function () {
      */
     if ( ! $has_prefix ) {
 
-        // Rule: match /{anything}/ → query downloads post by name
-        // 'bottom' = lowest priority, so WP pages/posts/terms win conflicts
+        // Rule: match /{anything}/ → query downloads post by name.
+        // 'bottom' helps when WP's pagename catch-all is NOT registered
+        // (e.g. plain permalinks or after a full flush).
         add_rewrite_rule(
             '^([^/]+)/?$',
             'index.php?post_type=downloads&name=$matches[1]',
@@ -85,3 +86,51 @@ add_filter( 'post_type_link', function ( $link, $post ) {
     // Prefix-less: return /{post-slug}/
     return trailingslashit( home_url( '/' . $post->post_name ) );
 }, 10, 2 );
+
+
+/* ── Fix 404 in prefix-less mode ────────────────────────────
+ *
+ * WordPress's built-in pagename rewrite rule matches /{slug}/
+ * BEFORE our bottom-priority rule, so it sets pagename=slug
+ * and returns 404 when no WP page exists with that slug.
+ *
+ * This filter intercepts the parsed request vars and, when
+ * WordPress has resolved a URL to a "pagename" that doesn't
+ * belong to a real page, checks whether a published `downloads`
+ * post with that slug exists and reroutes the query accordingly.
+ * Real WP pages (about, contact, …) are untouched.
+ */
+add_filter( 'request', function ( $vars ) {
+
+    // Only active in prefix-less mode
+    if ( svault_dl_slug() !== '' ) return $vars;
+
+    // Only intercept when WordPress resolved the URL as a page
+    if ( empty( $vars['pagename'] ) ) return $vars;
+
+    $slug = $vars['pagename'];
+
+    // Ignore multi-level paths (real pages like /parent/child/)
+    if ( strpos( $slug, '/' ) !== false ) return $vars;
+
+    // Direct DB lookup — avoids WP_Query recursion
+    global $wpdb;
+    $post_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT ID FROM {$wpdb->posts}
+         WHERE post_name = %s
+           AND post_type = 'downloads'
+           AND post_status = 'publish'
+         LIMIT 1",
+        $slug
+    ) );
+
+    if ( ! $post_id ) return $vars; // no downloads post → let WP handle (real page or 404)
+
+    // Override: serve this downloads post instead
+    return [
+        'post_type' => 'downloads',
+        'name'      => $slug,
+        'downloads' => $slug,   // CPT query_var
+    ];
+
+} );
