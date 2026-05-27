@@ -65,9 +65,36 @@ add_action( 'init', function () {
      */
     if ( ! $has_prefix ) {
 
-        // Rule: match /{anything}/ → query downloads post by name.
-        // 'bottom' helps when WP's pagename catch-all is NOT registered
-        // (e.g. plain permalinks or after a full flush).
+        /* ── Archive rules (top priority so pagename catch-all loses) ──
+         *
+         * When rewrite=>false, WordPress generates the base archive rule
+         * but SKIPS pagination rules (it guards them with `if($this->rewrite)`).
+         * We add them explicitly here.
+         */
+        $arc = preg_quote( svault_archive_slug(), '#' );
+
+        add_rewrite_rule(                                            // /all-downloads/
+            "^{$arc}/?$",
+            'index.php?post_type=downloads',
+            'top'
+        );
+        add_rewrite_rule(                                            // /all-downloads/page/2/
+            "^{$arc}/page/([0-9]+)/?$",
+            'index.php?post_type=downloads&paged=$matches[1]',
+            'top'
+        );
+        add_rewrite_rule(                                            // /all-downloads/feed/
+            "^{$arc}/feed/(rss|rss2|atom)/?$",
+            'index.php?post_type=downloads&feed=$matches[1]',
+            'top'
+        );
+
+        /* ── Single post fallback rule (bottom) ────────────────────
+         *
+         * The 'request' filter below is the primary fix for single
+         * posts; this rule only helps when the pagename catch-all
+         * isn't registered (e.g. plain permalinks mode).
+         */
         add_rewrite_rule(
             '^([^/]+)/?$',
             'index.php?post_type=downloads&name=$matches[1]',
@@ -105,32 +132,44 @@ add_filter( 'request', function ( $vars ) {
     // Only active in prefix-less mode
     if ( svault_dl_slug() !== '' ) return $vars;
 
-    // Only intercept when WordPress resolved the URL as a page
+    // Only intercept when WordPress resolved the URL as a "page"
     if ( empty( $vars['pagename'] ) ) return $vars;
 
     $slug = $vars['pagename'];
 
-    // Ignore multi-level paths (real pages like /parent/child/)
+    // Ignore multi-level paths (real WP pages like /parent/child/)
     if ( strpos( $slug, '/' ) !== false ) return $vars;
 
-    // Direct DB lookup — avoids WP_Query recursion
+    /* ── Check 1: is this the archive slug? ────────────────────
+     *
+     * If a WP page happens to share the archive slug, the pagename
+     * rule would win (same priority). We always want the archive.
+     */
+    if ( $slug === svault_archive_slug() ) {
+        return [ 'post_type' => 'downloads' ];
+    }
+
+    /* ── Check 2: is this a single downloads post slug? ────────
+     *
+     * Direct DB lookup — avoids WP_Query recursion.
+     */
     global $wpdb;
     $post_id = $wpdb->get_var( $wpdb->prepare(
         "SELECT ID FROM {$wpdb->posts}
-         WHERE post_name = %s
-           AND post_type = 'downloads'
+         WHERE post_name   = %s
+           AND post_type   = 'downloads'
            AND post_status = 'publish'
          LIMIT 1",
         $slug
     ) );
 
-    if ( ! $post_id ) return $vars; // no downloads post → let WP handle (real page or 404)
+    if ( ! $post_id ) return $vars; // no match → leave as-is (real page or 404)
 
-    // Override: serve this downloads post instead
+    // Override: serve this downloads post
     return [
         'post_type' => 'downloads',
         'name'      => $slug,
-        'downloads' => $slug,   // CPT query_var
+        'downloads' => $slug,
     ];
 
 } );

@@ -40,7 +40,7 @@ add_action( 'admin_init', function () {
     ] );
     register_setting( 'svault_options_group', 'svault_cat_slug', [
         'sanitize_callback' => 'svault_sanitize_slug_required',
-        'default'           => 'category',
+        'default'           => 'software-cat',  // 'category' conflicts with WP built-in base
     ] );
     register_setting( 'svault_options_group', 'svault_badge_slug', [
         'sanitize_callback' => 'svault_sanitize_slug_required',
@@ -57,10 +57,20 @@ function svault_sanitize_slug( $value ) {
     return $value; // can be empty ''
 }
 
-// Requires a value — falls back to default if empty
+// Requires a value — returns empty string on invalid input so WP uses the registered default
 function svault_sanitize_slug_required( $value ) {
-    $value = sanitize_title( trim( wp_unslash( $value ) ) );
-    return $value ?: 'all-downloads';
+    $clean = sanitize_title( trim( wp_unslash( $value ) ) );
+    // Guard: never allow 'category' as cat slug (conflicts with WP built-in taxonomy base)
+    if ( $clean === 'category' ) {
+        $clean = 'software-cat';
+        add_settings_error(
+            'svault_cat_slug',
+            'slug_conflict',
+            'الرابط "category" محجوز لتصنيفات ووردبريس الافتراضية. تم تغييره إلى "software-cat" تلقائياً.',
+            'warning'
+        );
+    }
+    return $clean ?: 'all-downloads';
 }
 
 /* ── 4. Auto-flush rewrite rules after any option updates ── */
@@ -91,7 +101,7 @@ function svault_render_settings_page() {
 
     $dl_slug      = get_option( 'svault_dl_slug',      '' );
     $archive_slug = get_option( 'svault_archive_slug', 'all-downloads' );
-    $cat_slug     = get_option( 'svault_cat_slug',     'category' );
+    $cat_slug     = get_option( 'svault_cat_slug',     'software-cat' );
     $badge_slug   = get_option( 'svault_badge_slug',   'badge' );
     $home         = trailingslashit( home_url() );
     ?>
@@ -293,14 +303,14 @@ function svault_render_settings_page() {
                                    id="svault_cat_slug"
                                    name="svault_cat_slug"
                                    value="<?php echo esc_attr( $cat_slug ); ?>"
-                                   placeholder="category"
+                                   placeholder="software-cat"
                                    dir="ltr">
                             <span style="color:#646970;font-size:0.85rem">/ <em>اسم-التصنيف</em> /</span>
                         </div>
                         <div class="svault-preview">
                             مثال: <strong><?php echo esc_html( $home . $cat_slug . '/العاب/' ); ?></strong>
                         </div>
-                        <p class="svault-desc">رابط صفحات التصنيف مثل: ألعاب، برامج، أدوات…</p>
+                        <p class="svault-desc">رابط صفحات التصنيف مثل: ألعاب، برامج، أدوات… <strong style="color:#d63638">لا تستخدم "category" — هو محجوز لووردبريس</strong></p>
                     </div>
 
                     <hr class="svault-separator">
@@ -400,7 +410,7 @@ function svault_render_settings_page() {
         );
         updatePreview('svault_cat_slug',
             document.querySelector('#svault_cat_slug').closest('.svault-field').querySelector('.svault-preview'),
-            function(v) { return home + (v || 'category') + '/العاب/'; }
+            function(v) { return home + (v || 'software-cat') + '/العاب/'; }
         );
         updatePreview('svault_badge_slug',
             document.querySelector('#svault_badge_slug').closest('.svault-field').querySelector('.svault-preview'),
@@ -414,5 +424,17 @@ function svault_render_settings_page() {
 /* ── 6. Slug helper functions (used by CPT & taxonomy files) */
 function svault_dl_slug()      { return get_option( 'svault_dl_slug',      '' ); }
 function svault_archive_slug() { return get_option( 'svault_archive_slug', 'all-downloads' ); }
-function svault_cat_slug()     { return get_option( 'svault_cat_slug',     'category' ); }
+function svault_cat_slug()     { return get_option( 'svault_cat_slug',     'software-cat' ); }  // never 'category'
 function svault_badge_slug()   { return get_option( 'svault_badge_slug',   'badge' ); }
+
+/* ── 7. Flush rewrite rules on theme activation ──────────────
+ *
+ * Without this, all custom URLs (CPT, archive, taxonomies) return
+ * 404 after first install until the admin manually visits
+ * Settings → Permalinks → Save Changes.
+ */
+add_action( 'after_switch_theme', function () {
+    // Register CPT & taxonomies first so their rules are available
+    do_action( 'init' );
+    flush_rewrite_rules();
+} );
