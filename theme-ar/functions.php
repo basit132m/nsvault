@@ -4,6 +4,9 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+// Prevent KK Star Ratings from auto-inserting into post content
+add_filter('kksr_auto', '__return_false');
+
 define( 'SVAULT_VERSION', '1.0.0' );
 define( 'SVAULT_DIR',     get_template_directory() );
 define( 'SVAULT_URI',     get_template_directory_uri() );
