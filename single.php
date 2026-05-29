@@ -195,7 +195,7 @@ get_header();
 
 <!-- Sidebar -->
 <aside class="asv-sidebar">
-    <?php if (is_active_sidebar('article-sidebar')) dynamic_sidebar('article-sidebar'); ?>
+    <?php dynamic_sidebar('article-sidebar'); ?>
 </aside>
 
 </div></div></div>
